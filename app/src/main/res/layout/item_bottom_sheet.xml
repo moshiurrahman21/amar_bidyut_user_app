@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/itemRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="14dp"
+        android:background="?attr/selectableItemBackground">
+
+        <!-- Left dot -->
+        <View
+            android:id="@+id/statusDot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/circle_green"
+            android:layout_marginEnd="12dp"/>
+
+        <!-- Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="গোয়ালচামট সাবস্টেশন"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#0F1923"/>
+
+            <TextView
+                android:id="@+id/tvItemSub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="৪টি ফিডার"
+                android:textSize="11sp"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="2dp"/>
+
+        </LinearLayout>
+
+        <!-- Arrow -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="›"
+            android:textSize="22sp"
+            android:textColor="#CBD5E1"/>
+
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E2E8F0"
+        android:layout_marginHorizontal="14dp"/>
+
+</LinearLayout>

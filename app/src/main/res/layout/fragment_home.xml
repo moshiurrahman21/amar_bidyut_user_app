@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#003087"
+            android:paddingHorizontal="10dp"
+            android:visibility="visible"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:cardCornerRadius="10dp"
+                android:layout_gravity="center_vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="#FFFFFF">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⚡"
+                        android:textSize="20sp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_weight="1"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="আমার বিদ্যুৎ"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvsubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="বাখুন্ডা - বাখুন্ডা ফিডার - গোয়ালচামট "
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+
+                    />
+
+            </LinearLayout>
+
+<!--
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_live_bg"
+                android:paddingHorizontal="3dp"
+                android:paddingVertical="2dp"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+                >
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/live"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/live_anim"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Live"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:padding="2dp"
+                    android:layout_gravity="center_vertical"
+                    />
+
+
+
+            </LinearLayout>
+-->
+
+        </LinearLayout>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#003087"
+                android:elevation="4dp"
+                android:padding="0dp"
+                app:navigationIcon="@drawable/baseline_menu_24"
+                app:logo="@drawable/baseline_electric_bolt_24"
+                app:title="আমার বিদ্যুৎ"
+                app:subtitle="এলাকা-ফিডার-সাবস্টেশন"
+                app:titleTextColor="@color/white"
+                app:subtitleTextColor="@color/white"
+                android:gravity="center_horizontal"
+                />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+
+                >
+
+
+
+
+
+        <!-- ══════════════════════════════ -->
+        <!-- NOTICE CARD                   -->
+        <!-- visibility="gone" রাখবে      -->
+        <!-- notice আসলে VISIBLE করবে     -->
+        <!-- ══════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/notificationCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+
+            <!-- Top row: WZPDCL tag + Close button -->
+            <RelativeLayout
+                android:id="@+id/topBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingHorizontal="5dp"
+                android:background="#78350F"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#33000000"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="3dp"
+                    android:text="WZPDCL নোটিশ"
+                    android:textColor="#FCD34D"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/close"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="#33FFFFFF"
+                    android:padding="4dp"
+                    android:src="@drawable/baseline_close_24"
+                    app:tint="#FFFFFF" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/notificationLay"
+                android:layout_below="@id/topBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#78350F"
+                android:orientation="vertical"
+                android:padding="7dp"
+
+                >
+
+
+                <!-- Title -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/baseline_warning_24"
+                        app:tint="#FCD34D"
+                        android:layout_marginEnd="7dp"/>
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="আগামীকাল বিদ্যুৎ বন্ধ থাকবে"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Info Grid: তারিখ | সময় -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="6dp">
+
+                    <!-- তারিখ -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="3dp"
+                        android:background="@drawable/item_bg"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="তারিখ"
+                            android:textColor="#AAFFFFFF"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- সময় -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@drawable/item_bg"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="সময়"
+                            android:textColor="#AAFFFFFF"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textColor="#FCD34D"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Info Grid: কারণ | এলাকা -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+
+                    <!-- কারণ -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="3dp"
+                        android:background="@drawable/item_bg"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="কারণ"
+                            android:textColor="#AAFFFFFF"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/reason"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <!-- এলাকা -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@drawable/item_bg"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="এলাকা"
+                            android:textColor="#AAFFFFFF"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/area"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Notification footer -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="7dp"
+                        android:src="@drawable/baseline_notifications_24"
+                        app:tint="#FCD34D" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="আসার ১০ মিনিট আগে push notification পাবেন"
+                        android:textColor="#CCFFFFFF"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- ══════════════════════════════ -->
+        <!-- STATUS CARD                   -->
+        <!-- ══════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/infoCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
+
+                <!-- Top color bar — status অনুযায়ী রঙ বদলাবে -->
+                <View
+                    android:id="@+id/statusBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="#E03B3B" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="20dp">
+
+                    <!-- Lottie Animation -->
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_view"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginBottom="10dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/current_anim"
+                        android:scaleType="centerCrop"
+                        />
+
+                    <!-- Status Text -->
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="বিদ্যুৎ নেই"
+                        android:textColor="#E03B3B"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Reason Chip -->
+                    <TextView
+                        android:id="@+id/tvReason"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔧 লাইনে মেরামতের কাজ চলছে"
+                        android:background="#F1F4F8"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp"
+                        android:textColor="#5C6E82"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="18dp"/>
+
+                    <!-- Timer Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="কতক্ষণ ধরে নেই"
+                        android:textColor="#9AAFC4"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Timer Boxes -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <!-- ঘণ্টা -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="2dp">
+
+                            <LinearLayout
+                                android:layout_width="64dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:background="#F1F4F8"
+                                android:paddingVertical="10dp">
+
+                                <TextView
+                                    android:id="@+id/tvHour"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="০১"
+                                    android:textSize="26sp"
+                                    android:textColor="#0F1923"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ঘণ্টা"
+                                    android:textSize="10sp"
+                                    android:textColor="#9AAFC4"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Separator -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="#9AAFC4"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginBottom="14dp"/>
+
+                        <!-- মিনিট -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="2dp">
+
+                            <LinearLayout
+                                android:layout_width="64dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:background="#F1F4F8"
+                                android:paddingVertical="10dp">
+
+                                <TextView
+                                    android:id="@+id/tvMinute"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="৪৫"
+                                    android:textSize="26sp"
+                                    android:textColor="#0F1923"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="মিনিট"
+                                    android:textSize="10sp"
+                                    android:textColor="#9AAFC4"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Separator -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="#9AAFC4"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginBottom="14dp"/>
+
+                        <!-- সেকেন্ড -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="2dp">
+
+                            <LinearLayout
+                                android:layout_width="64dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:background="#F1F4F8"
+                                android:paddingVertical="10dp">
+
+                                <TextView
+                                    android:id="@+id/tvSecond"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="২২"
+                                    android:textSize="26sp"
+                                    android:textColor="#0F1923"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="সেকেন্ড"
+                                    android:textSize="10sp"
+                                    android:textColor="#9AAFC4"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <!-- ETA Chip -->
+                    <TextView
+                        android:id="@+id/tvEta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏰  সম্ভাব্য আসার সময়: রাত ৯:৩০"
+                        android:background="#FFF8E1"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:textColor="#D97706"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- ══════════════════════════════ -->
+        <!-- COMPLAINT BUTTON              -->
+        <!-- ══════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/complainBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/baseline_notifications_24"
+                    app:tint="#5C6E82" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="অভিযোগ জানান"
+                    android:textColor="#5C6E82"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- ══════════════════════════════ -->
+        <!-- COMPLAINT FORM                -->
+        <!-- visibility="gone" রাখবে      -->
+        <!-- button click করলে VISIBLE    -->
+        <!-- ══════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/complainForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Form Title -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="অভিযোগ ফর্ম"
+                    android:textColor="#0F1923"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="14dp"/>
+
+                <!-- Spinner Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="অভিযোগের ধরন"
+                    android:textColor="#9AAFC4"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.07"
+                    android:layout_marginBottom="5dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerComplain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F1F4F8"
+                    android:padding="12dp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- EditText Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="বিস্তারিত লিখুন (ঐচ্ছিক)"
+                    android:textColor="#9AAFC4"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.07"
+                    android:layout_marginBottom="5dp"/>
+
+                <EditText
+                    android:id="@+id/etComplain"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:background="#F1F4F8"
+                    android:gravity="top|start"
+                    android:hint="আপনার সমস্যার বিবরণ দিন..."
+                    android:textColorHint="#C4D0DC"
+                    android:padding="12dp"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Submit Button -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/complainsubmitBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#2563EB"
+                        android:gravity="center"
+                        android:padding="13dp"
+                        android:text="অভিযোগ পাঠান"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Success Message — gone রাখবে, submit হলে visible -->
+                <TextView
+                    android:id="@+id/tvComplainSuccess"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="✓  অভিযোগ গৃহীত হয়েছে — টিকেট #FD-2847"
+                    android:background="#F0FDF4"
+                    android:padding="12dp"
+                    android:textColor="#166534"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>
