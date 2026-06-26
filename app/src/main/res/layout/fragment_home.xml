@@ -491,9 +491,10 @@
 
                     <!-- Timer Label -->
                     <TextView
+                        android:id="@+id/tvComing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="কতক্ষণ ধরে নেই"
+                        android:text="⚡ বিদ্যুৎ আসার সম্ভাব্য সময়"
                         android:textColor="#9AAFC4"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -652,6 +653,16 @@
                         android:textColor="#D97706"
                         android:textSize="13sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvUpdatedBy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✏️ আপডেট: রাকিব হাসান · ১২:৩০ PM"
+                        android:textSize="11sp"
+                        android:textColor="#94A3B8"
+                        android:layout_marginTop="6dp"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 
