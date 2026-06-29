@@ -12,8 +12,11 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -56,6 +59,25 @@ public class HomeFragment extends Fragment {
 
     RequestQueue requestQueue;
     private boolean isFragmentActive = false;
+    CardView complainBtn, complainForm, complainsubmitBtn;
+    Spinner spinnerComplain;
+    EditText etComplain;
+    TextView tvComplainSuccess;
+    CardView ticketCheckCard, btnCheckTicket;
+    EditText etTicket;
+    TextView tvTicketResult;
+
+    // Spinner এ অভিযোগের ধরন
+    String[] types = {
+            "অভিযোগের ধরন বাছাই করুন",
+            "বিদ্যুৎ বিল সমস্যা",
+            "লো ভোল্টেজ",
+            "ঘন ঘন বিদ্যুৎ বিচ্ছিন্ন",
+            "ট্রান্সফরমার সমস্যা",
+            "মিটার সমস্যা",
+            "তার ছেঁড়া / বিপজ্জনক",
+            "অন্যান্য"
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +100,45 @@ public class HomeFragment extends Fragment {
         tvNoticeArea     = view.findViewById(R.id.area);
         tvUpdatedBy     = view.findViewById(R.id.tvUpdatedBy);
         tvComing     = view.findViewById(R.id.tvComing);
+        complainBtn        = view.findViewById(R.id.complainBtn);
+        complainForm       = view.findViewById(R.id.complainForm);
+        complainsubmitBtn  = view.findViewById(R.id.complainsubmitBtn);
+        spinnerComplain    = view.findViewById(R.id.spinnerComplain);
+        etComplain         = view.findViewById(R.id.etComplain);
+        tvComplainSuccess  = view.findViewById(R.id.tvComplainSuccess);
+        ticketCheckCard = view.findViewById(R.id.ticketCheckCard);
+        btnCheckTicket  = view.findViewById(R.id.btnCheckTicket);
+        etTicket        = view.findViewById(R.id.etTicket);
+        tvTicketResult  = view.findViewById(R.id.tvTicketResult);
+
+// শুরুতে form ও success message লুকানো থাকবে
+        complainForm.setVisibility(GONE);
+        tvComplainSuccess.setVisibility(GONE);
+
+
+        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                types
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerComplain.setAdapter(adapter);
+
+// Button click — form দেখাও/লুকাও
+        complainBtn.setOnClickListener(v -> {
+            if (complainForm.getVisibility() == VISIBLE) {
+                complainForm.setVisibility(GONE);
+            } else {
+                complainForm.setVisibility(VISIBLE);
+                tvComplainSuccess.setVisibility(GONE);
+            }
+        });
+
+// Submit button
+        complainsubmitBtn.setOnClickListener(v -> submitComplaint());
+        btnCheckTicket.setOnClickListener(v -> checkTicket());
+
+
 
         notificationCard.setVisibility(GONE);
         isFragmentActive = true;
@@ -97,6 +158,7 @@ public class HomeFragment extends Fragment {
         tvsubTitle.setOnClickListener(v -> {
             prefs.edit().clear().apply();
             startActivity(new Intent(requireContext(), SelectActivity.class));
+            getActivity().finish();
         });
 
         // Notice close button
@@ -306,7 +368,15 @@ public class HomeFragment extends Fragment {
     // Notice API call
     // ══════════════════════════════════════════
     private void loadNotice(String feederId) {
-        String url = "https://dainikbhorerbarta.com/bidyut_super_admin/get_user_notices.php?feeder_id=" + feederId;
+        SharedPreferences prefs = requireContext()
+                .getSharedPreferences("amarbidyut", MODE_PRIVATE);
+        String subId  = prefs.getString("sub_id", "");
+        String areaId = prefs.getString("area_id", "");
+
+        String url = "https://dainikbhorerbarta.com/bidyut_super_admin/get_user_notices.php"
+                + "?feeder_id=" + feederId
+                + "&sub_id=" + subId
+                + "&area_id=" + areaId;
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
@@ -316,7 +386,14 @@ public class HomeFragment extends Fragment {
                             return;
                         }
 
-                        JSONObject notice = response.getJSONObject("notice");
+                        org.json.JSONArray notices = response.getJSONArray("notices");
+                        if (notices.length() == 0) {
+                            notificationCard.setVisibility(GONE);
+                            return;
+                        }
+
+                        // সবচেয়ে নতুন notice দেখাও
+                        JSONObject notice = notices.getJSONObject(0);
                         String noticeId = notice.optString("id", "");
 
                         SharedPreferences noticePref = requireContext()
@@ -325,11 +402,25 @@ public class HomeFragment extends Fragment {
 
                         if (!noticeId.equals(seenId) && !noticeId.isEmpty()) {
                             currentNoticeId = noticeId;
-                            tvNoticeTitle.setText(notice.optString("title", ""));
-                            tvNoticeDate.setText(notice.optString("date", ""));
-                            tvNoticeTime.setText(notice.optString("time", ""));
-                            tvNoticeReason.setText(notice.optString("reason", ""));
-                            tvNoticeArea.setText(notice.optString("area", ""));
+
+                            // Title
+                            String title = notice.optString("title", notice.optString("type", "নোটিশ"));
+                            tvNoticeTitle.setText(title);
+
+                            // তারিখ ও সময়
+                            tvNoticeDate.setText(notice.optString("notice_date", ""));
+                            tvNoticeTime.setText(notice.optString("notice_time", ""));
+
+                            // বার্তা
+                            tvNoticeReason.setText(notice.optString("message", ""));
+
+                            // এলাকা
+                            String area = notice.optString("feeder_name", "");
+                            if (!notice.optString("area_name", "").isEmpty()) {
+                                area += " · " + notice.optString("area_name", "");
+                            }
+                            tvNoticeArea.setText(area);
+
                             notificationCard.setVisibility(VISIBLE);
                         } else {
                             notificationCard.setVisibility(GONE);
@@ -423,4 +514,156 @@ public class HomeFragment extends Fragment {
         if (countUpRunnable != null) handler.removeCallbacks(countUpRunnable);
         if (refreshRunnable != null) refreshHandler.removeCallbacks(refreshRunnable);
     }
+
+    private void submitComplaint() {
+        // Validation
+        if (spinnerComplain.getSelectedItemPosition() == 0) {
+            android.widget.Toast.makeText(requireContext(),
+                    "অভিযোগের ধরন বাছাই করুন", android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        EditText etPhone = requireView().findViewById(R.id.etPhone);
+        String phone = etPhone.getText().toString().trim();
+
+        if (phone.isEmpty() || phone.length() < 11) {
+            android.widget.Toast.makeText(requireContext(),
+                    "সঠিক মোবাইল নম্বর দিন", android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+// params-এ যোগ করো
+
+        String complaintType = spinnerComplain.getSelectedItem().toString();
+        String description   = etComplain.getText().toString().trim();
+
+        SharedPreferences prefs = requireContext()
+                .getSharedPreferences("amarbidyut", MODE_PRIVATE);
+        String feederId   = prefs.getString("feeder_id", "0");
+        String subId      = prefs.getString("sub_id", "0");
+        String areaId     = prefs.getString("area_id", "0");
+        String areaName   = prefs.getString("area", "");
+        String feederName = prefs.getString("feed", "");
+
+        String url = "https://dainikbhorerbarta.com/bidyut_apps/submit_complaint.php";
+
+        com.android.volley.toolbox.StringRequest req = new com.android.volley.toolbox.StringRequest(
+                com.android.volley.Request.Method.POST, url,
+                response -> {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getBoolean("success")) {
+                            // Success দেখাও
+                            String ticket = json.optString("ticket", "");
+                            tvComplainSuccess.setText("✓ অভিযোগ গৃহীত হয়েছে!\nটিকেট নম্বর: " + ticket + "\nএই নম্বর দিয়ে পরে status জানতে পারবেন");
+                            tvComplainSuccess.setVisibility(VISIBLE);
+                            // Form reset করো
+                            spinnerComplain.setSelection(0);
+                            etComplain.setText("");
+                            // ৩ সেকেন্ড পর form লুকাও
+                            handler.postDelayed(() -> {
+                                if (!isFragmentActive) return;
+                                complainForm.setVisibility(GONE);
+                                tvComplainSuccess.setVisibility(GONE);
+                            }, 10000);
+                        } else {
+                            android.widget.Toast.makeText(requireContext(),
+                                    json.optString("message", "সমস্যা হয়েছে"),
+                                    android.widget.Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        android.widget.Toast.makeText(requireContext(),
+                                "সমস্যা হয়েছে", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> android.widget.Toast.makeText(requireContext(),
+                        "নেটওয়ার্ক সমস্যা", android.widget.Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            protected java.util.Map<String, String> getParams() {
+                java.util.Map<String, String> params = new java.util.HashMap<>();
+                params.put("feeder_id",      feederId);
+                params.put("sub_id",         subId);
+                params.put("area_id",        areaId);
+                params.put("area_name",      areaName);
+                params.put("feeder_name",    feederName);
+                params.put("complaint_type", complaintType);
+                params.put("description",    description);
+                params.put("phone", phone);
+
+                return params;
+            }
+        };
+
+        req.setShouldCache(false);
+        requestQueue.add(req);
+    }
+
+
+    private void checkTicket() {
+        String ticket = etTicket.getText().toString().trim().toUpperCase();
+
+        if (ticket.isEmpty()) {
+            Toast.makeText(requireContext(), "টিকেট নম্বর লিখুন", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String url = "https://dainikbhorerbarta.com/bidyut_apps/check_complaint.php?ticket=" + ticket;
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        if (!response.getBoolean("success")) {
+                            tvTicketResult.setText("❌ টিকেট পাওয়া যায়নি");
+                            tvTicketResult.setBackgroundColor(Color.parseColor("#FEE2E2"));
+                            tvTicketResult.setTextColor(Color.parseColor("#991B1B"));
+                            tvTicketResult.setVisibility(View.VISIBLE);
+                            return;
+                        }
+
+                        String statusText = response.optString("status_text", "");
+                        String type       = response.optString("type", "");
+                        String createdAt  = response.optString("created_at", "");
+                        String status     = response.optString("status", "");
+
+                        int bgColor, textColor;
+                        switch (status) {
+                            case "resolved":
+                                bgColor = Color.parseColor("#DCFCE7");
+                                textColor = Color.parseColor("#166534");
+                                break;
+                            case "seen":
+                                bgColor = Color.parseColor("#FEF9C3");
+                                textColor = Color.parseColor("#92400E");
+                                break;
+                            default:
+                                bgColor = Color.parseColor("#FEE2E2");
+                                textColor = Color.parseColor("#991B1B");
+                                break;
+                        }
+
+                        tvTicketResult.setText(
+                                "🎫 টিকেট: " + ticket + "\n" +
+                                        "📋 ধরন: " + type + "\n" +
+                                        "📌 অবস্থা: " + statusText + "\n" +
+                                        "🕐 জমা: " + createdAt
+                        );
+                        tvTicketResult.setBackgroundColor(bgColor);
+                        tvTicketResult.setTextColor(textColor);
+                        tvTicketResult.setVisibility(View.VISIBLE);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    tvTicketResult.setText("❌ নেটওয়ার্ক সমস্যা");
+                    tvTicketResult.setVisibility(View.VISIBLE);
+                }
+        );
+
+        req.setShouldCache(false);
+        requestQueue.add(req);
+    }
+
 }
