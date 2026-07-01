@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="#F7F9FC"
     android:fillViewport="true"
-    tools:context=".HomeFragment">
+    tools:context=".HomeFragment"
+    android:clipToPadding="true"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,7 +70,7 @@
                     android:id="@+id/tvsubTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="বাখুন্ডা - বাখুন্ডা ফিডার - গোয়ালচামট "
+                    android:text="▼ বাখুন্ডা - বাখুন্ডা ফিডার - গোয়ালচামট "
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="12sp"
@@ -885,8 +887,15 @@
                                 android:textColorHint="#C4D0DC"
                                 android:padding="10dp"
                                 android:textSize="13sp"
+                                android:textAlignment="gravity"
                                 android:textAllCaps="true"
-                                android:layout_marginEnd="8dp"/>
+                                android:layout_marginEnd="8dp"
+                                android:maxLength="11"
+                                android:layout_marginBottom="12dp"
+                                android:textDirection="locale"
+                                android:layoutDirection="locale"
+                                android:gravity="top|start"
+                                />
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/btnCheckTicket"
@@ -907,7 +916,19 @@
 
                             </androidx.cardview.widget.CardView>
 
+
+
                         </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvSavedTicket"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="আপনার শেষ টিকেট: AB-XXXXXX"
+                            android:textSize="11sp"
+                            android:textColor="#1D4ED8"
+                            android:layout_marginTop="6dp"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/tvTicketResult"

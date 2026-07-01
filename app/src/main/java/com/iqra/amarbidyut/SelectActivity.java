@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -143,7 +142,6 @@ public class SelectActivity extends AppCompatActivity {
                                 hashMap.put("name", name);
                                 substation_arraylist.add(hashMap);
 
-                                Toast.makeText(SelectActivity.this, "name: array sub "+name, Toast.LENGTH_SHORT).show();
 
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
@@ -252,7 +250,6 @@ public class SelectActivity extends AppCompatActivity {
                     .putString("area_id", area_id)
                     .apply();
 
-            Toast.makeText(this, "selsub:" + selSub + " selfeed:" + selFeed + " selarea:" + selArea, Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, MainActivity.class));
             finish();
         });
@@ -362,7 +359,6 @@ public class SelectActivity extends AppCompatActivity {
     // ── BottomSheet ──
     private void showBottomSheet(String type) {
 
-        Toast.makeText(this, "area: "+area_arraylist.size(), Toast.LENGTH_SHORT).show();
 
         ArrayList<String[]> items = new ArrayList<>();
 
@@ -372,7 +368,6 @@ public class SelectActivity extends AppCompatActivity {
                 String name = substation_arraylist.get(i).get("name");
                 String id = substation_arraylist.get(i).get("id");
                 items.add(new String[]{name, id, ""});
-                Toast.makeText(this, "name: "+name, Toast.LENGTH_SHORT).show();
             }
 
         } else if (type.equals("feed")) {

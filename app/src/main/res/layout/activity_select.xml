@@ -6,6 +6,7 @@
     android:background="#F2F5FA"
     android:fillViewport="true"
     android:id="@+id/main"
+    android:fitsSystemWindows="true"
     >
 
     <LinearLayout

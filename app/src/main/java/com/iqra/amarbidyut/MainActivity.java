@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         frameLayout = findViewById(R.id.frameLayout);
-        bottomNav = findViewById(R.id.bottomNav);
+
+
 
 
 
@@ -42,30 +43,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, new HomeFragment()).commit();
 
-
-        bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                if (menuItem.getItemId() == R.id.home) {
-
-                    // আগেই Home এ আছি কিনা check করো
-                    Fragment current = getSupportFragmentManager()
-                            .findFragmentById(R.id.frameLayout);
-
-                    if (current instanceof HomeFragment) {
-                        return true; // আবার load করবে না
-                    }
-
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.frameLayout, new HomeFragment())
-                            .commit();
-                }
-
-                return true; // false ছিল — true করো
-            }
-        });
 
     }
 }

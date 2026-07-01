@@ -115,6 +115,20 @@ public class HomeFragment extends Fragment {
         complainForm.setVisibility(GONE);
         tvComplainSuccess.setVisibility(GONE);
 
+        TextView tvSavedTicket = view.findViewById(R.id.tvSavedTicket);
+        String savedTicket = requireContext()
+                .getSharedPreferences("complaint", MODE_PRIVATE)
+                .getString("last_ticket", "");
+
+        if (!savedTicket.isEmpty()) {
+            tvSavedTicket.setText("আপনার শেষ টিকেট: " + savedTicket + " (চাপ দিন)");
+            tvSavedTicket.setVisibility(View.VISIBLE);
+            // চাপলে auto fill হবে
+            tvSavedTicket.setOnClickListener(v -> {
+                etTicket.setText(savedTicket);
+            });
+        }
+
 
         android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
                 requireContext(),
@@ -152,7 +166,7 @@ public class HomeFragment extends Fragment {
         String area   = prefs.getString("area", "");
         String feederId = prefs.getString("feeder_id", "0");
 
-        tvsubTitle.setText(area + " · " + feed + " · " + sub);
+        tvsubTitle.setText("▼ " +area + " · " + feed + " · " + sub);
 
         // এলাকা পরিবর্তন করতে চাইলে
         tvsubTitle.setOnClickListener(v -> {
@@ -257,7 +271,7 @@ public class HomeFragment extends Fragment {
 
             // Updated by
             if (!updatedBy.isEmpty() && !updatedBy.equals("null")) {
-                tvUpdatedBy.setText("✏️ " + updatedBy + " · " + formatEta(lastUpdated));
+                tvUpdatedBy.setText("পরিবর্তন: " + updatedBy + " · " + formatEta(lastUpdated));
                 tvUpdatedBy.setVisibility(VISIBLE);
             } else {
                 tvUpdatedBy.setVisibility(GONE);
@@ -270,7 +284,7 @@ public class HomeFragment extends Fragment {
 
             // কারণ
             if (!offReason.isEmpty() && !offReason.equals("null")) {
-                tvReason.setText("🔧 " + offReason);
+                tvReason.setText("কারণ: " + offReason);
                 tvComing.setText("⚡ বিদ্যুৎ আসার সম্ভাব্য সময় বাকি");
                 tvReason.setVisibility(VISIBLE);
             } else {
@@ -279,7 +293,7 @@ public class HomeFragment extends Fragment {
 
             // ETA
             if (!etaAt.isEmpty() && !etaAt.equals("null")) {
-                tvEta.setText("⏰ সম্ভাব্য আসার সময়: " + formatEta(etaAt));
+                tvEta.setText("সম্ভাব্য আসার সময়: "+ formatEta(etaAt));
                 tvEta.setVisibility(VISIBLE);
                 startCountDownTimer(etaAt, false);
             } else {
@@ -291,7 +305,7 @@ public class HomeFragment extends Fragment {
 
             // Updated by
             if (!updatedBy.isEmpty() && !updatedBy.equals("null")) {
-                tvUpdatedBy.setText("✏️ " + updatedBy + " · " + formatEta(lastUpdated));
+                tvUpdatedBy.setText("পরিবর্তন: " + updatedBy + " · " + formatEta(lastUpdated));
                 tvUpdatedBy.setVisibility(VISIBLE);
             } else {
                 tvUpdatedBy.setVisibility(GONE);
@@ -324,7 +338,7 @@ public class HomeFragment extends Fragment {
                     } else {
                         tvStatus.setText("বিদ্যুৎ আসার সময় হয়েছে ⚡");
                         tvStatus.setTextColor(Color.parseColor("#D97706"));
-                        tvEta.setText("⏰ সার্ভার থেকে আপডেট নিচ্ছে...");
+                        tvEta.setText("সার্ভার থেকে আপডেট নিচ্ছে...");
                         tvEta.setVisibility(VISIBLE);
                     }
 
@@ -462,9 +476,28 @@ public class HomeFragment extends Fragment {
             inFmt.setTimeZone(TimeZone.getTimeZone("Asia/Dhaka"));
             Date date = inFmt.parse(etaAt);
             if (date == null) return etaAt;
-            SimpleDateFormat outFmt = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-            outFmt.setTimeZone(TimeZone.getTimeZone("Asia/Dhaka"));
-            return outFmt.format(date);
+
+            // আজকের date কিনা check করো
+            java.util.Calendar etaCal = java.util.Calendar.getInstance();
+            etaCal.setTime(date);
+            java.util.Calendar today = java.util.Calendar.getInstance();
+
+            String[] months = {"জানু", "ফেব্রু", "মার্চ", "এপ্রিল", "মে", "জুন",
+                    "জুলাই", "আগস্ট", "সেপ্টে", "অক্টো", "নভে", "ডিসে"};
+
+            SimpleDateFormat timeFmt = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+            timeFmt.setTimeZone(TimeZone.getTimeZone("Asia/Dhaka"));
+            String timeStr = timeFmt.format(date);
+
+            // আজকে হলে শুধু সময়, অন্যদিন হলে তারিখ + সময়
+            if (etaCal.get(java.util.Calendar.DAY_OF_YEAR) == today.get(java.util.Calendar.DAY_OF_YEAR)
+                    && etaCal.get(java.util.Calendar.YEAR) == today.get(java.util.Calendar.YEAR)) {
+                return "আজ " + timeStr;
+            } else {
+                int day = etaCal.get(java.util.Calendar.DAY_OF_MONTH);
+                String month = months[etaCal.get(java.util.Calendar.MONTH)];
+                return day + " " + month + " " + timeStr;
+            }
         } catch (Exception e) {
             return etaAt;
         }
@@ -555,12 +588,36 @@ public class HomeFragment extends Fragment {
                         if (json.getBoolean("success")) {
                             // Success দেখাও
                             String ticket = json.optString("ticket", "");
-                            tvComplainSuccess.setText("✓ অভিযোগ গৃহীত হয়েছে!\nটিকেট নম্বর: " + ticket + "\nএই নম্বর দিয়ে পরে status জানতে পারবেন");
+                            tvComplainSuccess.setText("✓ অভিযোগ গৃহীত হয়েছে!\nটিকেট নম্বর: " + ticket + "\nএই নম্বর দিয়ে পরে status জানতে পারবেন\n(চাপ দিয়ে ধরুন copy করতে)");
                             tvComplainSuccess.setVisibility(VISIBLE);
+
+
+
+                            // ← এখানে বসাও
+                            tvComplainSuccess.setOnLongClickListener(v -> {
+                                android.content.ClipboardManager clipboard =
+                                        (android.content.ClipboardManager) requireContext()
+                                                .getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                                android.content.ClipData clip =
+                                        android.content.ClipData.newPlainText("ticket", ticket);
+                                clipboard.setPrimaryClip(clip);
+                                android.widget.Toast.makeText(requireContext(),
+                                        "✓ টিকেট নম্বর copy হয়েছে: " + ticket,
+                                        android.widget.Toast.LENGTH_LONG).show();
+                                return true;
+                            });
+
+                            // Ticket SharedPreferences-এ save করো
+                            requireContext()
+                                    .getSharedPreferences("complaint", MODE_PRIVATE)
+                                    .edit()
+                                    .putString("last_ticket", ticket)
+                                    .apply();
+
                             // Form reset করো
                             spinnerComplain.setSelection(0);
                             etComplain.setText("");
-                            // ৩ সেকেন্ড পর form লুকাও
+                            // ১০ সেকেন্ড পর form লুকাও
                             handler.postDelayed(() -> {
                                 if (!isFragmentActive) return;
                                 complainForm.setVisibility(GONE);
