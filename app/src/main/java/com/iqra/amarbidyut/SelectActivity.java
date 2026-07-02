@@ -156,6 +156,7 @@ public class SelectActivity extends AppCompatActivity {
                     }
                 });
 
+                jsonArrayRequest.setShouldCache(false);
                 requestQueue.add(jsonArrayRequest);
             }
         });
@@ -196,6 +197,7 @@ public class SelectActivity extends AppCompatActivity {
                 }
             });
 
+            jsonArrayRequest.setShouldCache(false);
             requestQueue.add(jsonArrayRequest);
         });
 
@@ -235,6 +237,7 @@ public class SelectActivity extends AppCompatActivity {
                 }
             });
 
+            jsonArrayRequest.setShouldCache(false);
             requestQueue.add(jsonArrayRequest);
         });
 
@@ -298,6 +301,7 @@ public class SelectActivity extends AppCompatActivity {
             }
         });
 
+        jsonArrayRequest.setShouldCache(false);
         requestQueue.add(jsonArrayRequest);
     }
 

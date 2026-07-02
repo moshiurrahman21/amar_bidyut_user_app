@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Intent;
@@ -37,7 +39,8 @@ public class HomeFragment extends Fragment {
 
     // ── Views ──
     TextView tvsubTitle, tvStatus, tvReason, tvEta, tvUpdatedBy,tvComing;
-    ;
+    LinearLayout home_layout;
+    ProgressBar progressBar;
     TextView tvHour, tvMinute, tvSecond;
     CardView notificationCard, infoCard;
     TextView tvNoticeTitle, tvNoticeDate, tvNoticeTime, tvNoticeReason, tvNoticeArea;
@@ -110,6 +113,11 @@ public class HomeFragment extends Fragment {
         btnCheckTicket  = view.findViewById(R.id.btnCheckTicket);
         etTicket        = view.findViewById(R.id.etTicket);
         tvTicketResult  = view.findViewById(R.id.tvTicketResult);
+        progressBar = view.findViewById(R.id.progressBar);
+        home_layout = view.findViewById(R.id.home_layout);
+
+        progressBar.setVisibility(VISIBLE);
+        home_layout.setVisibility(GONE);
 
 // শুরুতে form ও success message লুকানো থাকবে
         complainForm.setVisibility(GONE);
@@ -211,6 +219,9 @@ public class HomeFragment extends Fragment {
                 response -> {
                     try {
                         if (!response.getBoolean("success")) return;
+
+                        progressBar.setVisibility(GONE);
+                        home_layout.setVisibility(VISIBLE);
 
                         JSONObject data = response.getJSONObject("data");
 
